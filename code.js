@@ -4,6 +4,14 @@ const drawingContainer = document.querySelector('.drawingContainer')
 drawingContainer.style.gridTemplateColumns=`repeat(${size}, ${dimensions}px) `;
 drawingContainer.style.gridTemplateRows=`repeat(${size}, ${dimensions}px) `;
 
+function turnblack(){
+    this.style.backgroundColor='black';
+}
+
+function turnwhite(){
+    this.style.backgroundColor='white';
+}
+
 createPixels(size);
 function createPixels(size){
 for (let i=1;i<=size;i++){
@@ -16,9 +24,7 @@ for (let i=1;i<=size;i++){
         drawingContainer.appendChild(onePixel);
         onePixel.style.gridRow= i;
         onePixel.style.gridColumn=j;
-        onePixel.addEventListener('mouseover',()=>{
-            onePixel.classList.add('turnblack')
-        });
+        onePixel.addEventListener('mouseover',turnblack);
     }
 }}
 
@@ -37,13 +43,42 @@ function resizePixels(){
     drawingContainer.style.gridTemplateRows=`repeat(${size}, ${dimensions}px) `;
     createPixels(size);
 }
-const sizeButton = document.querySelector('#setSize');
-sizeButton.addEventListener('click',resizePixels)
 
+function clearPixels(){
+    const nodePixeli = document.querySelectorAll('.pixel');
+    arrayPixeli = Array.from(nodePixeli);
+    arrayPixeli.forEach(jedanPixelic => {
+        jedanPixelic.style.backgroundColor='white';
+    })}
 
-/*
-let pixels=new Array(size);
-for (let i=0;i<pixels.length;i++){
-    pixels[i]=new Array(size);
+function erasePixels(){
+    const nodePixeli = document.querySelectorAll('.pixel');
+    arrayPixeli = Array.from(nodePixeli);
+    arrayPixeli.forEach(jedanPixel => {
+        jedanPixel.removeEventListener('mouseover',turnblack);
+        jedanPixel.addEventListener('mouseover',turnwhite);
+    })
+
 }
-*/
+
+function colorPixels(){
+    const nodePixeli = document.querySelectorAll('.pixel');
+    arrayPixeli = Array.from(nodePixeli);
+    arrayPixeli.forEach(jedanPixel => {
+        jedanPixel.removeEventListener('mouseover',turnwhite);
+        jedanPixel.addEventListener('mouseover',turnblack);
+    })
+}
+
+const sizeButton = document.querySelector('#setSize');
+sizeButton.addEventListener('click',resizePixels);
+
+const clearButton = document.querySelector('#clear');
+clearButton.addEventListener('click',clearPixels);
+
+const eraseButton = document.querySelector('#eraser');
+eraseButton.addEventListener('click',erasePixels);
+
+const colorButton = document.querySelector('#colorButton');
+colorButton.addEventListener('click',colorPixels);
+
