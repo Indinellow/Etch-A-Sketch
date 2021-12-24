@@ -2,16 +2,16 @@
     display:flex;
     align-items: center;
     justify-content: center;
-    gap:64px;
+    gap:32px;
 }
 
 .menuContainer{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: space-around;
+    align-items: center;
     flex:1 0 auto;
-    max-width: 100px;
+    max-width: 300px;
     gap:32px;
     background-color: rgb(48, 45, 45);
     max-height: 400px;
@@ -23,20 +23,15 @@
 
 .drawingContainer{
     display: grid;
-    /*grid-template-columns: repeat(18,32px [col-start]);
-    grid-template-rows: repeat(18,32px [row-start]);
-    */
     width:  512px;
     height: 512px;
-    margin: 20px;
+    margin: 10px;
     border: double;
     border-color:yellow;
     border-width: 10px;
 }
 
 .pixel{
-    /* width: 8px;
-    height: 8px; */ 
     background-color: white;
 }
 
@@ -59,4 +54,35 @@ body{
     border: double;
     border-color:yellow;
     border-width: 10px;
+}
+
+#colorInput{
+    border:0;
+    padding:4px;
+    margin: 0px;
+    border-radius: 100%;
+    background-color: transparent;
+    width: 3rem;
+    height: 3rem;
+}
+
+.colorLabel{
+    color:black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+}
+
+.colorPickerContainer{
+    display:flex;
+    align-items: center;
+    background-color: yellow;
+    font-weight: bold;
+    font-size: medium;
+}
+
+button{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: yellow;
+    font-weight: bold;
+    font-size: medium;
 }

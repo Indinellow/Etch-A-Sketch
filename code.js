@@ -1,8 +1,3 @@
-let size =16;
-let dimensions=512/size;
-const drawingContainer = document.querySelector('.drawingContainer')
-drawingContainer.style.gridTemplateColumns=`repeat(${size}, ${dimensions}px) `;
-drawingContainer.style.gridTemplateRows=`repeat(${size}, ${dimensions}px) `;
 
 function turnblack(){
     this.style.backgroundColor='black';
@@ -12,7 +7,6 @@ function turnwhite(){
     this.style.backgroundColor='white';
 }
 
-createPixels(size);
 function createPixels(size){
 for (let i=1;i<=size;i++){
     for (let j=1;j<=size;j++){
@@ -29,7 +23,11 @@ for (let i=1;i<=size;i++){
 }}
 
 function setSize(){
-    const chosenSize =parseInt( prompt('Pick a size n: ','16'));
+    let chosenSize =parseInt( prompt('Pick a size n: ','16'));
+    if(chosenSize>100){
+        alert('That is too big of a size, pick again!');
+        chosenSize=setSize();
+    }
     return chosenSize
 }
 
@@ -61,6 +59,8 @@ function erasePixels(){
 
 }
 
+
+
 function colorPixels(){
     const nodePixeli = document.querySelectorAll('.pixel');
     arrayPixeli = Array.from(nodePixeli);
@@ -69,6 +69,27 @@ function colorPixels(){
         jedanPixel.addEventListener('mouseover',turnblack);
     })
 }
+
+function selectColor(event){
+    const nodePixeli = document.querySelectorAll('.pixel');
+    arrayPixeli = Array.from(nodePixeli);
+    arrayPixeli.forEach(jedanPixel => { 
+        jedanPixel.removeEventListener('mouseover',turnwhite);  
+        jedanPixel.removeEventListener('mouseover',turnblack);  
+        jedanPixel.addEventListener('mouseover',()=>{
+            jedanPixel.style.backgroundColor = event.target.value;
+        });
+    }
+
+)}
+
+
+let size =16;
+let dimensions=512/size;
+const drawingContainer = document.querySelector('.drawingContainer')
+drawingContainer.style.gridTemplateColumns=`repeat(${size}, ${dimensions}px) `;
+drawingContainer.style.gridTemplateRows=`repeat(${size}, ${dimensions}px) `;
+createPixels(size);
 
 const sizeButton = document.querySelector('#setSize');
 sizeButton.addEventListener('click',resizePixels);
@@ -81,4 +102,7 @@ eraseButton.addEventListener('click',erasePixels);
 
 const colorButton = document.querySelector('#colorButton');
 colorButton.addEventListener('click',colorPixels);
+
+const colorInput = document.querySelector('#colorInput');
+colorInput.addEventListener('input',selectColor);
 
