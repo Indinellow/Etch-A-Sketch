@@ -1,10 +1,15 @@
-
-function turnblack(){
+function getRandomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+function turnBlack(){
     this.style.backgroundColor='black';
+    this.style.opacity=1;
 }
 
-function turnwhite(){
+function turnWhite(){
     this.style.backgroundColor='white';
+    this.style.opacity=1;
+
 }
 
 function createPixels(size){
@@ -18,7 +23,7 @@ for (let i=1;i<=size;i++){
         drawingContainer.appendChild(onePixel);
         onePixel.style.gridRow= i;
         onePixel.style.gridColumn=j;
-        onePixel.addEventListener('mouseover',turnblack);
+        onePixel.addEventListener('mouseover',turnBlack);
     }
 }}
 
@@ -43,18 +48,20 @@ function resizePixels(){
 }
 
 function clearPixels(){
-    const nodePixeli = document.querySelectorAll('.pixel');
-    arrayPixeli = Array.from(nodePixeli);
-    arrayPixeli.forEach(jedanPixelic => {
-        jedanPixelic.style.backgroundColor='white';
+    const nodePixels = document.querySelectorAll('.pixel');
+    arrayPixels = Array.from(nodePixels);
+    arrayPixels.forEach(onePixel => {
+        onePixel.style.backgroundColor='white';
+        onePixel.style.opacity=1;
     })}
 
 function erasePixels(){
-    const nodePixeli = document.querySelectorAll('.pixel');
-    arrayPixeli = Array.from(nodePixeli);
-    arrayPixeli.forEach(jedanPixel => {
-        jedanPixel.removeEventListener('mouseover',turnblack);
-        jedanPixel.addEventListener('mouseover',turnwhite);
+    const nodePixels = document.querySelectorAll('.pixel');
+    arrayPixels = Array.from(nodePixels);
+    arrayPixels.forEach(onePixel => {
+        onePixel.removeEventListener('mouseover',turnColor);  
+        onePixel.removeEventListener('mouseover',turnBlack);
+        onePixel.addEventListener('mouseover',turnWhite);
     })
 
 }
@@ -62,29 +69,68 @@ function erasePixels(){
 
 
 function colorPixels(){
-    const nodePixeli = document.querySelectorAll('.pixel');
-    arrayPixeli = Array.from(nodePixeli);
-    arrayPixeli.forEach(jedanPixel => {
-        jedanPixel.removeEventListener('mouseover',turnwhite);
-        jedanPixel.addEventListener('mouseover',turnblack);
+    const nodePixels = document.querySelectorAll('.pixel');
+    arrayPixels = Array.from(nodePixels);
+    arrayPixels.forEach(onePixel => {
+        onePixel.removeEventListener('mouseover',turnColor);  
+        onePixel.removeEventListener('mouseover',turnWhite);
+        onePixel.addEventListener('mouseover',turnBlack);
     })
 }
 
+function turnColor(){
+    this.style.backgroundColor = chosenColor;
+    this.style.opacity=1;
+
+}
+
 function selectColor(event){
-    const nodePixeli = document.querySelectorAll('.pixel');
-    arrayPixeli = Array.from(nodePixeli);
-    arrayPixeli.forEach(jedanPixel => { 
-        jedanPixel.removeEventListener('mouseover',turnwhite);  
-        jedanPixel.removeEventListener('mouseover',turnblack);  
-        jedanPixel.addEventListener('mouseover',()=>{
-            jedanPixel.style.backgroundColor = event.target.value;
-        });
+    chosenColor=event.target.value;
+    const nodePixels = document.querySelectorAll('.pixel');
+    arrayPixels = Array.from(nodePixels);
+    arrayPixels.forEach(onePixel => {
+        onePixel.removeEventListener('mouseover',turnColor);  
+        onePixel.removeEventListener('mouseover',turnWhite);  
+        onePixel.removeEventListener('mouseover',turnBlack);  
+        onePixel.addEventListener('mouseover',turnColor);
     }
 
 )}
 
+function turnRainbow(){
+    let Rvalue = getRandomIntFromInterval(1,255);
+    let Gvalue = getRandomIntFromInterval(1,255);
+    let Bvalue = getRandomIntFromInterval(1,255);
+    if(this.style.backgroundColor === "" || this.style.backgroundColor=== 'white'){
+        this.style.backgroundColor=`rgb(${Rvalue}, ${Gvalue}, ${Bvalue})`;
+    }
+    else{
+    rgb = this.style.backgroundColor
+    rgb=rgb.replace(/[^\d,]/g, '').split(',');
+    Rvalue = parseInt(rgb[0])*0.85;
+    Gvalue = parseInt(rgb[1])*0.85;
+    Bvalue = parseInt(rgb[2])*0.85;
+    this.style.backgroundColor=`rgb(${Rvalue}, ${Gvalue}, ${Bvalue})`;
+    }
+}
 
+function rainbowPixels(){
+    const nodePixels = document.querySelectorAll('.pixel');
+    arrayPixels = Array.from(nodePixels);
+    arrayPixels.forEach(onePixel => { 
+        onePixel.removeEventListener('mouseover',turnWhite);  
+        onePixel.removeEventListener('mouseover',turnBlack); 
+        onePixel.removeEventListener('mouseover',turnColor);
+        onePixel.addEventListener('mouseover',turnRainbow);
+    });
+}
+
+let chosenColor='black';
 let size =16;
+let RGBRandom = new Array(size*size).fill(0).map(() => new Array(3).fill(0));
+let RGBToBlack = new Array(size*size).fill(0).map(() => new Array(3).fill(0));
+const eventfunctions={};
+let rgb;
 let dimensions=512/size;
 const drawingContainer = document.querySelector('.drawingContainer')
 drawingContainer.style.gridTemplateColumns=`repeat(${size}, ${dimensions}px) `;
@@ -105,4 +151,10 @@ colorButton.addEventListener('click',colorPixels);
 
 const colorInput = document.querySelector('#colorInput');
 colorInput.addEventListener('input',selectColor);
+
+const rainbowButton = document.querySelector('#Rainbow');
+rainbowButton.addEventListener('click',rainbowPixels);
+
+//dodat dinamicni slider za pick a size, npr ko: https://www.google.com/search?q=photoshop+brush+size&client=ubuntu&hs=6SG&channel=fs&sxsrf=AOaemvLbFyJIYtOR2r8jfz56T7p73KTn3A:1640460237321&tbm=isch&source=iu&ictx=1&fir=_nVW42OGnbhXqM%252C79jVJ_NJMin6nM%252C_&vet=1&usg=AI4_-kRA6EhL2cW05lvIWeyadG5bFLWh8w&sa=X&ved=2ahUKEwjm5tnN1v_0AhUVhP0HHfFwAsYQ9QF6BAgMEAE&biw=1704&bih=901&dpr=2#imgrc=_nVW42OGnbhXqM
+
 
